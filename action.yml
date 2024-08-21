@@ -3,7 +3,7 @@ description: 'Bump chart version based on updated image tag'
 inputs:
   token:
     description: 'Github token'
-    default: ${{ secrets.GITHUB_TOKEN }}
+    required: true
 outputs:
   diff:
     description: 'Semver Difference between old and new tags'
