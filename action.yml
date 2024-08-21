@@ -1,6 +1,5 @@
 name: 'Update chart version'
 description: 'Bump chart version based on updated image tag'
-inputs:
 outputs:
   diff:
     description: 'Semver Difference between old and new tags'
