@@ -1,5 +1,9 @@
 name: 'Update chart version'
 description: 'Bump chart version based on updated image tag'
+inputs:
+  new_tag:
+    description: 'Github token'
+    default: ${{ secrets.GITHUB_TOKEN }}
 outputs:
   diff:
     description: 'Semver Difference between old and new tags'

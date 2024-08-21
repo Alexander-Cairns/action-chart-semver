@@ -34397,7 +34397,15 @@ function createNewChartVersion(chartVersion, diff) {
 
 
 async function run() {
-  core.info('hello world')
+  const token = core.getInput('token')
+  const octokit = github.getOctokit(token)
+  const context = github.context
+  const changed_files = await octokit.rest.pulls.listFiles({
+    ...context.repo,
+    pull_number: context.payload.pull_request.number,
+  })
+  
+  core.notice(changed_files.data[0].filename)
 }
 
 run();
