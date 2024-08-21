@@ -58,7 +58,7 @@ async function run() {
     (file) => file.filename.endsWith('values.yaml')
   )
 
-  for (file in changed_values_files){
+  for (file of changed_values_files){
     core.info(file)
     const base_file = await octokit.rest.repos.getContent({
       ...context.repo,
