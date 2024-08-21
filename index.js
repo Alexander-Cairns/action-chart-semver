@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const semver = require('semver');
+const yaml = require('yaml');
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
@@ -37,16 +38,36 @@ function createNewChartVersion(chartVersion, diff) {
 
 
 
+
 async function run() {
   const token = core.getInput('token')
   const octokit = github.getOctokit(token)
   const context = github.context
+  const pull_request = await octokit.rest.pulls.get({
+    ...context.repo,
+    pull_number: context.payload.pull_request.number
+  })
+  const base = pull_request.data.base.ref
   const changed_files = await octokit.rest.pulls.listFiles({
     ...context.repo,
     pull_number: context.payload.pull_request.number,
   })
   
-  core.notice(changed_files.data[0].filename)
+  core.notice()
+  const changed_values_files = changed_files.data.filter(
+    (file) => file.filename.endsWith('values.yaml')
+  )
+
+  for (file in changed_values_files){
+    core.info(file)
+    const base_file = await octokit.rest.repos.getContent({
+      ...context.repo,
+      path: file,
+      ref: base,
+    })
+    const base_content = base_file.data.content
+    core.info(base_content)
+  }
 }
 
 run();
