@@ -42897,10 +42897,10 @@ async function run() {
   )
 
   for (file of changed_values_files){
-    core.info(file)
+    core.info(file.filename)
     const base_file = await octokit.rest.repos.getContent({
       ...context.repo,
-      path: file,
+      path: file.filename,
       ref: base,
     })
     const base_content = base_file.data.content
