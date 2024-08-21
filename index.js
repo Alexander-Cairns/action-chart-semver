@@ -38,22 +38,7 @@ function createNewChartVersion(chartVersion, diff) {
 
 
 async function run() {
-    try {
-        const newTag = core.getInput('new_tag');
-        const oldTag = core.getInput('old_tag');
-        const chartVersion = core.getInput('chart_version');
-        core.debug(`New tag: ${newTag}`);
-        core.debug(`Old tag: ${oldTag}`);
-        core.debug(`Chart version: ${chartVersion}`);
-        const diff = getAppDiff(newTag, oldTag);
-        core.setOutput('diff', diff);
-        core.debug(`Diff: ${diff}`);
-        const newChartVersion = createNewChartVersion(chartVersion, diff);
-        core.setOutput('new_chart_version', newChartVersion);
-
-    } catch (error) {
-        core.setFailed(error.message);
-    }
+  core.info('hello world')
 }
 
 run();

@@ -1,15 +1,6 @@
 name: 'Update chart version'
 description: 'Bump chart version based on updated image tag'
 inputs:
-  new_tag:
-    description: 'The new image tag'
-    required: true
-  old_tag:
-    description: 'The old image tag'
-    required: true
-  chart_version:
-    description: 'The current chart version'
-    required: true
 outputs:
   diff:
     description: 'Semver Difference between old and new tags'
