@@ -1,7 +1,7 @@
 name: 'Update chart version'
 description: 'Bump chart version based on updated image tag'
 inputs:
-  new_tag:
+  token:
     description: 'Github token'
     default: ${{ secrets.GITHUB_TOKEN }}
 outputs:
