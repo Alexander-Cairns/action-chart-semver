@@ -77,7 +77,7 @@ async function run() {
     var chart = await getYaml(chart_file, context.ref)
     core.info(chart.version)
     const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
-    if (typeof diff == undefined) {
+    if (!diff) {
       continue
     }
     core.info(diff)
