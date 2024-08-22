@@ -77,6 +77,7 @@ async function run() {
     const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
     core.info(diff)
     core.info(createNewChartVersion(chart.version, diff))
+    core.info(context.ref)
     core.info('----')
 
   }
