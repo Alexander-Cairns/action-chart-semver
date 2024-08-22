@@ -68,14 +68,16 @@ async function run() {
 
   for (file of changed_values_files){
     core.info(file.filename)
+
     const base_values = await getYaml( file.filename, base)
     core.info(base_values.image.tag)
     const pr_values = await getYaml( file.filename, context.ref)
     core.info(pr_values.image.tag)
-    core.info(path.dirname(file.filename))
+
     const chart_file = `${path.dirname(file.filename)}/Chart.yaml` 
     var chart = await getYaml(chart_file, context.ref)
     core.info(chart.version)
+
     const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
     if (!diff) {
       continue
@@ -83,12 +85,15 @@ async function run() {
     core.info(diff)
     const newVersion = createNewChartVersion(chart.version, diff)
     chart.version = newVersion
+    chart.appVersion = pr_values.image.tag
     const chart_content = yaml.stringify(chart)
+
     const resp = await octokit.rest.repos.getContent({
       ...context.repo,
       path: chart_file,
       ref: pull_request.data.head.ref,
     })
+
     octokit.rest.repos.createOrUpdateFileContents({
       ...context.repo,
       path: chart_file,
