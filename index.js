@@ -6,7 +6,7 @@ const path = require('path');
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
-    if (!semver.valid(newTag) && !semver.valid(oldTag)) {
+    if (!semver.valid(newTag,{loose: true}) && !semver.valid(oldTag, {loose: true})) {
         core.setFailed('Invalid tag format detected');
         return;
     }
@@ -77,7 +77,7 @@ async function run() {
     const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
     core.info(diff)
     core.info(createNewChartVersion(chart.version, diff))
-    core.info(context.ref)
+    core.info(pull_request.data.head)
     core.info('----')
 
   }
