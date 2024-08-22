@@ -42922,13 +42922,17 @@ async function run() {
     const newVersion = createNewChartVersion(chart.version, diff)
     chart.version = newVersion
     const chart_content = yaml.stringify(chart)
-    const chart_sha = crypto.createHash('sha256').update(chart_content).digest('base64');
+    const resp = await octokit.rest.repos.getContent({
+      ...context.repo,
+      path: path,
+      ref: ref,
+    })
     octokit.rest.repos.createOrUpdateFileContents({
       ...context.repo,
       path: chart_file,
       branch: pull_request.data.head.ref,
       content: btoa(chart_content),
-      sha: chart_sha,
+      sha: resp.data.sha,
       message: 'bump chart',
     })
     core.info(pull_request.data.head.ref)
