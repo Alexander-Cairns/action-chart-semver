@@ -3,6 +3,7 @@ const github = require('@actions/github');
 const semver = require('semver');
 const yaml = require('yaml');
 const path = require('path');
+const crypto = require('crypto');
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
@@ -72,11 +73,26 @@ async function run() {
     const pr_values = await getYaml( file.filename, context.ref)
     core.info(pr_values.image.tag)
     core.info(path.dirname(file.filename))
-    const chart = await getYaml(`${path.dirname(file.filename)}/Chart.yaml` , context.ref)
+    const chart_file = `${path.dirname(file.filename)}/Chart.yaml` 
+    var chart = await getYaml(chart_file, context.ref)
     core.info(chart.version)
     const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
+    if (typeof diff == undefined) {
+      continue
+    }
     core.info(diff)
-    core.info(createNewChartVersion(chart.version, diff))
+    const newVersion = createNewChartVersion(chart.version, diff)
+    chart.version = newVersion
+    const chart_content = yaml.stringify(chart)
+    const chart_sha = crypto.createHash('sha256').update(chart_content).digest('base64');
+    octokit.rest.repos.createOrUpdateFileContents({
+      ...context.repo,
+      path: chart_file,
+      branch: pull_request.data.head.ref,
+      content: btoa(chart_content),
+      sha, chart_sha,
+      message: 'bump chart',
+    })
     core.info(pull_request.data.head.ref)
     core.info('----')
 
