@@ -86,8 +86,8 @@ async function run() {
     const chart_content = yaml.stringify(chart)
     const resp = await octokit.rest.repos.getContent({
       ...context.repo,
-      path: path,
-      ref: ref,
+      path: chart_file,
+      ref: pull_request.data.head.ref,
     })
     octokit.rest.repos.createOrUpdateFileContents({
       ...context.repo,
