@@ -68,7 +68,7 @@ async function run() {
   for (file of changed_values_files){
     core.info(file.filename)
     const base_values = await getYaml( file.filename, base)
-    core.info(image.tag)
+    core.info(base_values.image.tag)
     const pr_values = await getYaml( file.filename, context.ref)
     core.info(pr_values.image.tag)
     core.info(path.dirname(file.filename))
