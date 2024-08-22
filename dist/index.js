@@ -42915,7 +42915,7 @@ async function run() {
     var chart = await getYaml(chart_file, context.ref)
     core.info(chart.version)
     const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
-    if (typeof diff == undefined) {
+    if (!diff) {
       continue
     }
     core.info(diff)
@@ -42928,7 +42928,7 @@ async function run() {
       path: chart_file,
       branch: pull_request.data.head.ref,
       content: btoa(chart_content),
-      sha, chart_sha,
+      sha: chart_sha,
       message: 'bump chart',
     })
     core.info(pull_request.data.head.ref)

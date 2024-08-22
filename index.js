@@ -90,7 +90,7 @@ async function run() {
       path: chart_file,
       branch: pull_request.data.head.ref,
       content: btoa(chart_content),
-      sha, chart_sha,
+      sha: chart_sha,
       message: 'bump chart',
     })
     core.info(pull_request.data.head.ref)
