@@ -57,8 +57,8 @@ async function run() {
       path: path,
       ref: ref,
     })
-    const base_content = atob(resp.data.content)
-    return yaml.parse(base_content)
+    const content = atob(resp.data.content)
+    return yaml.parse(content)
   }
 
   const changed_values_files = changed_files.data.filter(
@@ -67,9 +67,9 @@ async function run() {
 
   for (file of changed_values_files){
     core.info(file.filename)
-    const base_tag = getYaml( file.filename, base).image.tag
+    const base_tag = getYaml( file.filename, base)//.image.tag
     core.info(base_tag)
-    const pr_tag = getYaml( file.filename, base).image.tag
+    const pr_tag = getYaml( file.filename, context.ref)//.image.tag
     core.info(pr_tag)
     core.info(path.dirname(file.filename))
     core.info('----')
