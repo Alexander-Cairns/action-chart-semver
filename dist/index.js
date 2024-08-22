@@ -42875,19 +42875,6 @@ function createNewChartVersion(chartVersion, diff) {
     }
 }
 
-
-
-async function getYaml(owner, repo, path, ref, octokit) {
-    const resp = await octokit.rest.repos.getContent({
-      owner: owner,
-      repo, repo,
-      path: path,
-      ref: ref,
-    })
-    const base_content = atob(resp.data.content)
-    return yaml.parse(base_content)
-}
-
 async function run() {
   const token = core.getInput('token')
   const octokit = github.getOctokit(token)
@@ -42902,26 +42889,25 @@ async function run() {
     pull_number: context.payload.pull_request.number,
   })
   
-  core.notice()
+  const getYaml = async function (path, ref) {
+    const resp = await octokit.rest.repos.getContent({
+      ...context.repo,
+      path: path,
+      ref: ref,
+    })
+    const base_content = atob(resp.data.content)
+    return yaml.parse(base_content)
+  }
+
   const changed_values_files = changed_files.data.filter(
     (file) => file.filename.endsWith('values.yaml')
   )
 
   for (file of changed_values_files){
     core.info(file.filename)
-    const base_tag = getYaml(
-      ...context.repo,
-      file.filename,
-      base,
-      octokit
-    ).image.tag
+    const base_tag = getYaml( file.filename, base).image.tag
     core.info(base_tag)
-    const pr_tag = getYaml(
-      ...context.repo,
-      file.filename,
-      base,
-      octokit
-    ).image.tag
+    const pr_tag = getYaml( file.filename, base).image.tag
     core.info(pr_tag)
     core.info(path.dirname(file.filename))
     core.info('----')
