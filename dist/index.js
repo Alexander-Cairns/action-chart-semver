@@ -42846,7 +42846,7 @@ function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
     if (!semver.valid(newTag,{loose: true}) && !semver.valid(oldTag, {loose: true})) {
         core.setFailed('Invalid tag format detected');
-        // return;
+        return;
     }
     const diff = semver.diff(newTag, oldTag);
     return diff;
