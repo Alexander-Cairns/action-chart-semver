@@ -42905,11 +42905,16 @@ async function run() {
 
   for (file of changed_values_files){
     core.info(file.filename)
-    const base_tag = getYaml( file.filename, base)//.image.tag
-    core.info(base_tag)
-    const pr_tag = getYaml( file.filename, context.ref)//.image.tag
-    core.info(pr_tag)
+    const base_values = await getYaml( file.filename, base)
+    core.info(image.tag)
+    const pr_values = await getYaml( file.filename, context.ref)
+    core.info(pr_values.image.tag)
     core.info(path.dirname(file.filename))
+    const chart = await getYaml(`${path.dirname(file.filename)}/Chart.yaml` , context.ref)
+    core.info(chart.version)
+    const diff = getAppDiff(pr_values.image.tag, base_values.image.tag)
+    core.info(diff)
+    core.info(createNewChartVersion(chart.version, diff))
     core.info('----')
 
   }
