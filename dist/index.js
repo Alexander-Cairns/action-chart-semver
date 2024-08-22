@@ -42903,7 +42903,7 @@ async function run() {
       path: file.filename,
       ref: base,
     })
-    const base_content = btoa(base_file.data.content)
+    const base_content = atob(base_file.data.content)
     core.info(base_content)
     const base_values = yaml.parse(base_content)
     core.info(base_values.image.tag)
